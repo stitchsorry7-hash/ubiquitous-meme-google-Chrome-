@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
 fun CurrencyScreen(openTeraBox: () -> Unit) {
     var amount by remember { mutableStateOf("100") }
     var rate by remember { mutableStateOf("35.00") }
+    var base by remember { mutableStateOf("USD") }
+    var target by remember { mutableStateOf("THB") }
     val result = CurrencyCalculator.convert(amount, rate)
 
     Column(
@@ -39,10 +41,23 @@ fun CurrencyScreen(openTeraBox: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("💱 Currency", style = MaterialTheme.typography.headlineMedium)
+        Text("แปลงสกุลเงิน", style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(
             value = amount,
             onValueChange = { amount = it },
             label = { Text("จำนวนเงิน") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = base,
+            onValueChange = { base = it.uppercase() },
+            label = { Text("สกุลเงินต้นทาง") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = target,
+            onValueChange = { target = it.uppercase() },
+            label = { Text("สกุลเงินปลายทาง") },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
@@ -51,8 +66,8 @@ fun CurrencyScreen(openTeraBox: () -> Unit) {
             label = { Text("อัตราแลกเปลี่ยน") },
             modifier = Modifier.fillMaxWidth()
         )
-        Text("ผลลัพธ์: $result", style = MaterialTheme.typography.titleLarge)
-        Text("TeraBox: พร้อมสำหรับการเชื่อมต่อผ่าน Open Platform เมื่อมี API/OAuth credentials ที่ออกโดย TeraBox")
+        Text("$amount $base = $result $target", style = MaterialTheme.typography.titleLarge)
+        Text("หมายเหตุ: อัตราแลกเปลี่ยนยังเป็นค่าแบบกรอกเอง จนกว่าจะตั้งค่า API ผู้ให้บริการจริง")
         Button(onClick = openTeraBox, modifier = Modifier.fillMaxWidth()) {
             Text("เปิด TeraBox")
         }
